@@ -19,13 +19,13 @@ const cargarTabla = (contactos)=>{
     });
     //3. Por cada contacto generar una fila de la tabla
 };
-window.addEventListener("DOMContentLoaded", ()=>{
-    let contactos = obtenerContactos();
+window.addEventListener("DOMContentLoaded", async ()=>{
+    let contactos = await obtenerContactos();
     cargarTabla(contactos);
 });
 
-document.querySelector("#filtro-txt").addEventListener('input', ()=>{
+document.querySelector("#filtro-txt").addEventListener('input', async ()=>{
     let filtro = document.querySelector("#filtro-txt").value.trim();
-    let contactos = obtenerContactos(filtro);
+    let contactos = await obtenerContactos(filtro);
     cargarTabla(contactos);
 });
