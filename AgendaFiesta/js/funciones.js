@@ -1,28 +1,20 @@
 
 //Guardar en el local storage
-const agregarContacto = (contacto)=>{
-   let lista = obtenerContactos();
-   lista.push(contacto);
-   localStorage.setItem("contactos", JSON.stringify(lista));
+const agregarContacto = async (contacto)=>{
+    let res = await axios.post("http://localhost:8080/contactos", contacto);
+    return res.data;
 
 };
 
 //Obtener desde el localstorage
-const obtenerContactos = (filtro=null)=>{
-    //Esto devuelve un string, o undefined
-    let lista = localStorage.getItem("contactos");
-    if(lista){
-        lista = JSON.parse(lista);
-    } else {
-        lista = [];
+const obtenerContactos = async (filtro=null)=>{
+    let res = null;
+    console.log(filtro);
+    if(filtro){
+        res = await axios.get(`http://localhost:8080/contactos/${filtro}`);
+    }else {
+        res = await axios.get("http://localhost:8080/contactos");
     }
-    //Estan filtrando
-    if(filtro != null){
-        //Filtrar la lista para traer solo cuando el filtro esta en alguna parte
-        lista = lista.filter( c=> c.nombre.includes(filtro) 
-        || c.telefono.includes(filtro)
-        || c.correo.includes(filtro));
-    }
-
+    let lista = res.data;
     return lista;
 };
