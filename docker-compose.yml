@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+  webapp:
+    container_name: web_agenda
+    image: nginx:latest
+    ports:
+      - 8082:80
+    volumes:
+      - $PWD/AgendaFiesta:/usr/share/nginx/html
+    depends_on:
+      - apirest
+    networks:
+      - agenda-net
+  apirest:
+    container_name: api_agenda
+    build:
+      context: $PWD/api/
+      dockerfile: $PWD/DockerfileAPI
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    networks:
+      - agenda-net
+  db:
+    container_name: db_agenda
+    image: mysql:8.0
+    environment:
+      - "MYSQL_ROOT_PASSWORD=123456"
+      - "MYSQL_DATABASE=agendas_db"
+      - "MYSQL_USER=agenda"
+      - "MYSQL_PASSWORD=123456"
+    ports:
+      - 3306:3306
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - agenda-net
+networks:
+  agenda-net:
+volumes:
+  db-data:
